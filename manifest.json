@@ -1,0 +1,6 @@
+{
+    "name": "Anti Rickroll",
+    "description": "Blocks all recognized Rickroll videos from YouTube",
+    "version": "1.0",
+    "manifest_version": 3
+}
