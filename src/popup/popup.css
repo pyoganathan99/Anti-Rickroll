@@ -1,0 +1,129 @@
+body {
+    width: 200px;
+    height: 320px;
+
+    background: url(background.png);
+    background-size: cover;
+
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: content-box;
+}
+
+main {
+    position: absolute;
+    top: 200px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 20px;
+}
+
+.sub-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.summary {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Atomic Properties */
+.pos-abs {
+    position: absolute !important;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.flex-column {
+    flex-direction: column !important;
+}
+
+.mt-1 {
+    margin-top: 4px;
+}
+
+.mt-auto {
+    margin-top: auto !important;
+}
+
+.mr-auto {
+    margin-right: auto !important;
+}
+
+.mb-auto {
+    margin-bottom: auto !important;
+}
+
+.ml-auto {
+    margin-left: auto !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+
+.justify-content-between {
+    justify-content: space-between !important;
+}
+
+.text-primary {
+    color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.text-secondary {
+    color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Checkbox */
+.checkbox {
+    cursor: pointer;
+}
+
+.checkbox input {
+    display: none;
+}
+
+.checkbox .container {
+    content: '';
+    display: inline-block;
+
+    width: 32px;
+    height: 18px;
+    border-radius: 9px;
+
+    background-color: #999999;
+    transition: background-color 300ms;
+}
+
+.checkbox .handle {
+    contain: 'hi';
+    display: inline-block;
+
+    width: 14px;
+    height: 14px;
+    border-radius: 8px;
+    margin: 2px;
+
+    background-color: #FFFFFF;
+
+    transition: transform 300ms;
+}
+
+.checkbox input:checked+.container {
+    background-color: #1098F7;
+}
+
+.checkbox input:checked+.container .handle {
+    transform: translateX(14px);
+}
