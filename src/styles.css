@@ -1,36 +1,10 @@
+/* Global styles */
 body {
-    width: 200px;
-    height: 320px;
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: content-box;
 
-    background: url(background.png);
-    background-size: cover;
-}
-
-main {
-    position: absolute;
-    top: 200px;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-
-    display: flex;
-    flex-direction: column;
-}
-
-.title {
-    font-size: 20px;
-}
-
-.sub-title {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-}
-
-.summary {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    margin: 0;
+    font-size: 100%;
 }
 
 /* Atomic Properties */
@@ -72,6 +46,14 @@ main {
 
 .justify-content-between {
     justify-content: space-between !important;
+}
+
+.justify-content-center {
+    justify-content: center !important;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .text-primary {
