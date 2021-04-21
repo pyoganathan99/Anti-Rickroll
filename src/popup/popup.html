@@ -25,9 +25,11 @@
             </div>
         </div>
         <div class="mt-auto d-flex justify-content-between align-items-center">
-            <span class="summary text-secondary">You are protected</span>
+            <span class="summary text-secondary" id="status-text">
+                Not protected
+            </span>
             <label class="checkbox">
-                <input type="checkbox" />
+                <input type="checkbox" id="enable-switch" />
                 <div class="container">
                     <div class="handle"></div>
                 </div>
@@ -35,5 +37,7 @@
         </div>
     </main>
 </body>
+
+<script src="./popup.js"></script>
 
 </html>
