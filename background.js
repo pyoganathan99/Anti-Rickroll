@@ -15,21 +15,18 @@ let extensionEnabled = false;
 chrome.webNavigation.onBeforeNavigate.addListener(handler);
 chrome.webNavigation.onHistoryStateUpdated.addListener(handler);
 
-chrome.runtime.onInstalled.addListener(() => {
-    console.log('Extension installed');
+console.log('Loading settings');
 
-    chrome.storage.sync.get('enabled', ({ enabled }) => {
-        if (enabled === undefined) {
-            console.log('Settings not found, updating default');
+chrome.storage.sync.get('enabled', ({ enabled }) => {
+    if (enabled === undefined) {
+        console.log('Settings not found, updating default');
 
-            extensionEnabled = true;
-            chrome.storage.sync.set({ enabled: true });
-        } else {
-            console.log('Loaded existing setting', { enabled });
-
-            extensionEnabled = enabled;
-        }
-    });
+        extensionEnabled = true;
+        chrome.storage.sync.set({ enabled: true });
+    } else {
+        console.log('Loaded existing setting', { enabled });
+        extensionEnabled = enabled;
+    }
 });
 
 chrome.runtime.onStartup.addListener(() => {
