@@ -10,52 +10,80 @@ const wellKnownRickrollIds = new Set([
     'bxqLsrlakK8', // Revideo - Rick Astley - Never Gonna Give You Up (Remastered 4K 60 FPS 1 minute version)
 ]);
 
-let extensionEnabled = false;
+const settings = {};
+loadSettings(settings);
 
-chrome.webNavigation.onBeforeNavigate.addListener(handler);
-chrome.webNavigation.onHistoryStateUpdated.addListener(handler);
+/**
+ * Identifies whether the given URL is a YouTube URL
+ * for any well known Rickroll videos
+ * 
+ * @param {string} urlStr Any fully qualified URL including all query params
+ * @returns {boolean} true if it is an identified Rickroll URL
+ */
+function isRickroll(urlStr) {
+    const url = new URL(urlStr);
 
-console.log('Loading settings');
-
-chrome.storage.sync.get('enabled', ({ enabled }) => {
-    if (enabled === undefined) {
-        console.log('Settings not found, updating default');
-
-        extensionEnabled = true;
-        chrome.storage.sync.set({ enabled: true });
-    } else {
-        console.log('Loaded existing setting', { enabled });
-        extensionEnabled = enabled;
+    if (url.host !== 'www.youtube.com') {
+        return false;
     }
-});
 
-chrome.runtime.onStartup.addListener(() => {
-    console.log('Extension startup');
+    if (!url.searchParams.has('v')) {
+        return false;
+    }
 
-    console.log(document);
+    const videoId = url.searchParams.get('v');
+    return wellKnownRickrollIds.has(videoId);
+}
 
-    chrome.storage.sync.get('enabled', ({ enabled }) => {
-        extensionEnabled = enabled === undefined || enabled;
-    });
-});
+/**
+ * Handler for any navigation/redirects. Checks whether the given URL is a 
+ * recognized Rickroll URL, and if so redirects the tab to the safe page.
+ * 
+ * Note: The Chrome Extensions API prefers that this be an arrow function.
+ */
+const handleNavigation = ({ tabId, url }) => {
+    console.log(`Handler invoked for URL: [${url}]`);
+
+    if (!settings.enabled) {
+        console.log('Rickroll protection disabled');
+        return;
+    }
+
+    if (isRickroll(url)) {
+        console.log('Rickroll detected, redirecting to safe page');
+        chrome.tabs.update(tabId, {
+            url: chrome.runtime.getURL('src/alternate_view/index.html')
+        });
+    }
+}
+
+chrome.webNavigation.onBeforeNavigate.addListener(handleNavigation);
+chrome.webNavigation.onHistoryStateUpdated.addListener(handleNavigation);
 
 chrome.storage.sync.onChanged.addListener(({ enabled }) => {
-    console.log('Setting toggled');
-
-    extensionEnabled = enabled.newValue;
+    console.log('Settings updated by user');
+    settings.enabled = enabled;
 });
 
-function handler ({ tabId, url }) {
-    if (!extensionEnabled) { return; }
+/**
+ * Gets the settings stored in the Extension API Sync storage and populates
+ * them in the given settings object.
+ * Creates the default settings if not already present.
+ * 
+ * @param {Object} settings The settings object
+ */
+function loadSettings(settings) {
+    chrome.storage.sync.get('enabled', ({ enabled }) => {
+        if (enabled === undefined) {
+            console.log('Settings not found, inserting default settings');
 
-    const params = new URL(url).searchParams;
+            settings.enabled = true;
+            chrome.storage.sync.set(settings);
 
-    if (!params.has('v')) { return; }
+            return;
+        }
 
-    const videoId = params.get('v');
-    if (!wellKnownRickrollIds.has(videoId)) { return; }
-
-    chrome.tabs.update(tabId, {
-        url: chrome.runtime.getURL('src/alternate_view/index.html')
+        console.log('Loaded existing setting', { enabled });
+        settings.enabled = enabled;
     });
 }
